@@ -20,8 +20,8 @@ Aggiungere Info e motivazioni
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Come Usare
-
-Semplicemente avviare il sito https://nandos0804.github.io/csoundVerb/
+Da terminale, eseguire il codice `python -m http.server /path/folder`\
+Oppure avviare il sito https://nandos0804.github.io/csoundVerb/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
