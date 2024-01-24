@@ -4,9 +4,6 @@
 ;============================================================
 ;Realtime Convolution for multiplatform export
 ;Giuseppe Ernandez Constp 2024
-;NO STOP
-;USCITA FORZATA UNICA CONDIZIONE DI CHIUSURA DEL PROGRAMMA
-;USARE CUFFIE! NESSUNA PROTIZIONE DA FEEDBACK
 ;============================================================
 -odac -iadc
 </CsOptions>
@@ -35,7 +32,7 @@ instr Main
         kvol  = (kvol < 0 ? 0 : .5*kvol*kmix)
         
         ; Dimensione delle partizioni per la convoluzione
-        ipartitionsize = 256
+        ipartitionsize = 512
         
         ; Calcolo latenza, copiato dal sorgente
         idel = (ksmps < ipartitionsize ? ipartitionsize + ksmps : ipartitionsize)/sr
