@@ -1,49 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Csound Verb</title>
 </head>
+<script type="text/javascript">
+    // Modulo csound
+    const csoundjs = "./js/csound.js";
+    // Init Csound 
+    let csound = null;
+
+    // CSD da passare a csound
+    const csd = './main.csd'
+
+    // Main Function, entry point
+    async function start() {
+        // Se non esiste nessuna instanza di csound
+        if (csound == null) {
+            // Import Metodo
+            const { Csound } = await import(csoundjs);
+
+            // Oggetto csound
+            csound = await Csound();
+           
+            // passo il csd al bin web di csound
+            await copyUrlToLocal(csd, csd)
+
+            // carico le risorse
+            const resources = [
+                "./Resources/IR44.wav"
+            ];
+
+            // le passo al bin di csound
+            await loadResources(csound, resources);
+
+            // compilo il csd
+            await csound.compileCsd(csd)
+
+            // output console csound
+            await csound.on("message", handleMessage);
+
+            // start the engine
+            await csound.start();
+
+        }
+
+    }
+    // Counter per print
+    /*
+    *code by victor lazzarini
+    */
+    let count = 0;
+
+    function handleMessage(message) {
+        // get the display element (called console in the page)
+        let element = document.getElementById('console');
+        // add the message to HTML content (plus a newline)
+        element.innerHTML += message + '\n';
+        // focus on bottom, new messages make the display scroll down
+        element.scrollTop = 99999;
+        // clear display every 1000 lines
+        if (count == 1000) {
+            count = 0;
+            element.innerHTML == "";
+        }
+        count += 1;
+    };
+
+    // Funzione per passare csd a bin web csound
+
+    /*
+    *code by victor lazzarini
+    */
+    async function copyUrlToLocal(src, dest) {
+        // fetch the file
+        let srcfile = await fetch(src)
+        // get the file data as an array
+        let dat = await srcfile.arrayBuffer();
+        // write the data as a new file in the filesystem
+        await csound.fs.writeFile(dest, new Uint8Array(dat));
+    }
+
+    // Passare risorse al bin csound (wav et simili)
+    const loadResources = async (csound, filesArray) => {
+        for (let i = 0; i < filesArray.length; i++) {
+            const fileUrl = filesArray[i];
+            const f = await fetch(fileUrl);
+            const fName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+            const path = `${fName}`;
+            const buffer = await f.arrayBuffer();
+            await csound.fs.writeFile(path, new Uint8Array(buffer));
+        }
+        return true;
+    }
+
+
+</script>
 
 <body>
-
-    <button id="startButton">Convolve!</button>
-
-    <script type="text/javascript">
-        document.getElementById('startButton').addEventListener('click', async function () {
-
-            // csound.js is the Csound WASM module
-            const csoundjs = "./js/csound.js";
-
-            // csound is the Csound engine object (null as we start)
-            let csound = null;
-
-            // CSD file name
-            const csd = './main.csd'
-
-            // this is the JS function to start Csound
-            // and resume performance if needed
-            async function start() {
-                // if the Csound object is not initialised
-                if (csound == null) {
-                    // import the Csound method from csound.js
-                    const { Csound } = await import(csoundjs);
-                    // create a Csound engine object inside the context actx
-                    csound = await Csound();
-                    // copy the CSD file to the Csound local filesystem
-                    await copyUrlToLocal(csd, csd)
-                    // compile the code in the CSD file
-                    await csound.compileCsd(csd)
-                    // handle Csound messages
-                    await csound.on("message", handleMessage);
-                    // start the engine
-                    await csound.start();
-                }
-            }
-        });
-    </script>
+    <h1>Csound Convolver</h1>
+    <p>Coded by Giuseppe Ernandez and Lorenzo Ballerini for Constp</p>
+    <p>
+        <input type="button" id="play" onclick="start()" value="Convolve">
+        </input>
+    </p>
+    
+    <p>
+        <textarea class="console" cols="80" rows="20" id="console">
+          </textarea>
+    <p>
+        <hr>
+    <p>giuseppeernandez@hotmail.it</p>
 
 </body>
 

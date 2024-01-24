@@ -1,2 +1,2 @@
 # csoundVerb
-trying csound from web
+Convoluzione partizionata su pagina web
