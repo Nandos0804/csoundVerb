@@ -15,7 +15,7 @@
 ;============================================================
 ;PARAMETRI DI CONTROLLO
 ;============================================================
-sr = 44100
+sr = 48000
 ksmps = 32
 nchnls = 2
 0dbfs  = 1
@@ -45,7 +45,7 @@ instr Main
         al, ar ins
 
         ; IR44 file impulso stereo
-        awetl, awetr pconvolve kvol*(al+ar), "IR44.wav", ipartitionsize
+        awetl, awetr pconvolve kvol*(al+ar), "Impulse.wav", ipartitionsize
 
         ; Delay del segnale per compensare con tempi di calcolo
         ; convoluzione e mettere "a tempo" il riv.
