@@ -4,45 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Csound Web Example</title>
+    <title>Csound Verb</title>
 </head>
 
 <body>
 
-    <button id="startButton">Play Sound</button>
+    <button id="startButton">Convolve!</button>
 
     <script type="text/javascript">
         document.getElementById('startButton').addEventListener('click', async function () {
 
-            // csound is the Csound engine object (null as we start)
-            let csound = null;
             // csound.js is the Csound WASM module
             const csoundjs = "./js/csound.js";
-            // csound synthesis code
-            const code = `
-                instr 1
-                    out linenr(oscili(0dbfs*p4,p5),0.01,0.5,0.01)
-                endin
-                schedule(1,0,1,0.2,A4)
-                `;
 
-            // if the Csound object is not initialised
-            if (csound == null) {
-                // import the Csound method from csound.js
-                const { Csound } = await import(csoundjs);
-                // create a Csound engine object
-                csound = await Csound();
-                // set realtime audio (dac) output  
-                await csound.setOption("-odac");
-                // compile csound code
-                await csound.compileOrc(code);
-                // start the engine
-                await csound.start();
-            } else
-                // if not just send an event to play a sound
-                await csound.inputMessage('i1 0 1 0.2 440');
+            // csound is the Csound engine object (null as we start)
+            let csound = null;
 
+            // CSD file name
+            const csd = './main.csd'
 
+            // this is the JS function to start Csound
+            // and resume performance if needed
+            async function start() {
+                // if the Csound object is not initialised
+                if (csound == null) {
+                    // import the Csound method from csound.js
+                    const { Csound } = await import(csoundjs);
+                    // create a Csound engine object inside the context actx
+                    csound = await Csound();
+                    // copy the CSD file to the Csound local filesystem
+                    await copyUrlToLocal(csd, csd)
+                    // compile the code in the CSD file
+                    await csound.compileCsd(csd)
+                    // handle Csound messages
+                    await csound.on("message", handleMessage);
+                    // start the engine
+                    await csound.start();
+                }
+            }
         });
     </script>
 
