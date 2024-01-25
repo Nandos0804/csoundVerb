@@ -10,118 +10,26 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
-<script type="text/javascript">
-    // Modulo csound
-    const csoundjs = "./js/csound.js";
-    // Init Csound 
-    let csound = null;
-
-    // CSD da passare a csound
-    const csd = './main.csd'
-
-    // Pause
-    async function pause() {
-        if (csound != null)
-            await csound.pause();
-    }
-
-    // Main Function, entry point
-    async function start() {
-        // Se non esiste nessuna instanza di csound
-        if (csound == null) {
-            // Import Metodo
-            const { Csound } = await import(csoundjs);
-
-            // Oggetto csound
-            csound = await Csound();
-
-            // passo il csd al bin web di csound
-            await copyUrlToLocal(csd, csd)
-
-            // carico le risorse
-            const resources = [
-                "./Resources/Impulse.wav"
-            ];
-
-            // le passo al bin di csound
-            await loadResources(csound, resources);
-
-            // compilo il csd
-            await csound.compileCsd(csd)
-
-            // output console csound
-            await csound.on("message", handleMessage);
-
-            // start the engine
-            await csound.start();
-
-        } else
-            await csound.resume();
-    }
-    // Counter per print
-    /*
-    *code by victor lazzarini
-    */
-    let count = 0;
-
-    function handleMessage(message) {
-        // get the display element (called console in the page)
-        let element = document.getElementById('console');
-        // add the message to HTML content (plus a newline)
-        element.innerHTML += message + '\n';
-        // focus on bottom, new messages make the display scroll down
-        element.scrollTop = 99999;
-        // clear display every 1000 lines
-        if (count == 1000) {
-            count = 0;
-            element.innerHTML == "";
-        }
-        count += 1;
-    };
-
-    // Funzione per passare csd a bin web csound
-
-    /*
-    *code by victor lazzarini
-    */
-    async function copyUrlToLocal(src, dest) {
-        // fetch the file
-        let srcfile = await fetch(src)
-        // get the file data as an array
-        let dat = await srcfile.arrayBuffer();
-        // write the data as a new file in the filesystem
-        await csound.fs.writeFile(dest, new Uint8Array(dat));
-    }
-
-    // Passare risorse al bin csound (wav et simili)
-    const loadResources = async (csound, filesArray) => {
-        for (let i = 0; i < filesArray.length; i++) {
-            const fileUrl = filesArray[i];
-            const f = await fetch(fileUrl);
-            const fName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-            const path = `${fName}`;
-            const buffer = await f.arrayBuffer();
-            await csound.fs.writeFile(path, new Uint8Array(buffer));
-        }
-        return true;
-    }
-
-
-</script>
-
 
 <body class="text-center bg-light">
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+
+     <!-- -->
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-            </script>
-        <!-- -->
+
+        <!--Main-->
 
         <main role="main" class="text-center mb-4">
+            <script type="text/javascript" src="../js/csoundLogic.js"></script>
             <!--Website Name -->
             <h1 class="cover-heading display-3">Csound Convolver</h1>
+            
             <!--Subtitle -->
             <p class="text-muted">Coded by Giuseppe Ernandez and Lorenzo Ballerini for Constp</p>
+            
             <!--Button -->
             <div class="btn-group d-flex">
                 <input type="button" class="btn btn-success btn-lg" id="play" onclick="start()" value="Start">
@@ -129,20 +37,24 @@
                 <input type="button" class="btn btn-danger btn-lg" id="pause" onclick="pause()" value="Pause">
                 </input>
             </div>
+            
             <!--Console Csound -->
             <div class="d-flex p-2">
                 <textarea class="form-control bg-dark text-success m-2" rows="15" id="console" readonly>
           </textarea>
             </div>
+       
         </main>
 
         <!--Footer -->
 
         <footer class="py-3 my-4 border-top">
-                <p class="text-center text-muted">Pagine Web Creata da Giuseppe Ernandez<br><a href="mailto:giuseppeernandez@hotmail.it">giuseppeernandez@hotmail.it</a></p>
+            <p class="text-center text-muted">Pagine Web Creata da Giuseppe Ernandez<br><a
+                    href="mailto:giuseppeernandez@hotmail.it">giuseppeernandez@hotmail.it</a></p>
         </footer>
 
     </div>
+
 </body>
 
 </html>
