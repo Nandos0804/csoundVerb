@@ -26,7 +26,7 @@ instr Main
         kmix = port(chnget:k("drywet"),0.01,-1)
         kgain = port(chnget:k("gain"),0.01,-1)
         ;volume generico
-        kvol  = kgain*kmix
+        kvol  = 0.5 * kmix
                              			
         ; opzionale, controllo valori fuori scala
         kmix = (kmix < 0 || kmix > 1 ? .5 : kmix)
@@ -49,7 +49,7 @@ instr Main
         ; convoluzione e mettere "a tempo" il riv.
         adryl delay (1-kmix)*al, idel
         adryr delay (1-kmix)*al, idel
-              outs adryl+awetl, adryr+awetr
+              outs (adryl+awetl)*kgain, (adryr+awetr)*kgain
 endin
 
 ; Prima chiamata, punto di inizio del programma
