@@ -19,11 +19,11 @@
 
 
     <!-- -->
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <div class="cover-container d-flex p-5 flex-column">
 
         <!--Main-->
 
-        <main role="main" class="text-center mb-4">
+        <main role="main" class="text-center">
 
             <!--Website Name -->
             <h1 class="cover-heading display-3">Csound Convolver</h1>
@@ -40,16 +40,30 @@
             </div>
 
             <!--Console Csound -->
-            <div class="d-flex p-2">
-                <textarea class="form-control bg-dark text-success m-2" rows="15" id="console" readonly>
+            <div>
+                <div>
+                    <textarea class="form-control bg-dark text-success m-2" rows="15" id="console" readonly>
           </textarea>
+
+          <!-- Controller Section -->
+          <div class="d-inline-flex mb-3">
+            <div class="p-2 bd-highlight">
+                <label for="drywet" class="form-label h4">Dry/Wet</label>
+                <input type="range" id="drywet" class="form-range" min="0" max="1" value="0.5" step="0.001"
+                oninput="setParameter(id, value)"></input>
             </div>
+            <div class="p-2 bd-highlight">
+                <label for="gain" class="form-label h4">Gain</label>
+                <input type="range" id="gain" class="form-range" min="0" max="1" value="0.5" step="0.001"
+                oninput="setParameter(id, value)"> </input>
+</div>
+          </div>
 
         </main>
 
         <!--Footer -->
 
-        <footer class="py-3 my-4 border-top">
+        <footer class="py-3 my-3 border-top">
             <p class="text-center text-muted">Pagine Web Creata da Giuseppe Ernandez<br><a
                     href="mailto:giuseppeernandez@hotmail.it">giuseppeernandez@hotmail.it</a></p>
         </footer>

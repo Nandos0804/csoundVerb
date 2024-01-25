@@ -1,5 +1,5 @@
 // Modulo csound
-const csoundjs = "../js/csound.js";
+const csoundjs = "./csound.js";
 // Init Csound
 let csound = null;
 
@@ -36,14 +36,19 @@ async function start() {
     // output console csound
     await csound.on("message", handleMessage);
 
+    // set drywet
+    await csound.setControlChannel("drywet", 0.5);
+    // set gaain
+    await csound.setControlChannel("gain", 0.5);
+
     // start the engine
     await csound.start();
   } else await csound.resume();
 }
-// Counter per print
 /*
  *code by victor lazzarini
  */
+// Counter per print
 let count = 0;
 
 function handleMessage(message) {
@@ -87,3 +92,14 @@ const loadResources = async (csound, filesArray) => {
   }
   return true;
 };
+
+// Funzione per prendere i valori da pagine web
+/*
+ *code by victor lazzarini
+ */
+async function setParameter(channel, value) {
+  // set channelF
+  if (csound) await csound.setControlChannel(channel, value);
+  // update display
+  document.getElementById(channel + "val").innerHTML = value;
+}

@@ -21,11 +21,12 @@ nchnls = 2
 ;Partitioned Convolution
 ;============================================================
 instr Main
-        ; dry wet
-        kmix = .5
 
+        ; dry wet
+        kmix = port(chnget:k("drywet"),0.01,-1)
+        kgain = port(chnget:k("gain"),0.01,-1)
         ;volume generico
-        kvol  = .05*kmix
+        kvol  = kgain*kmix
                              			
         ; opzionale, controllo valori fuori scala
         kmix = (kmix < 0 || kmix > 1 ? .5 : kmix)
@@ -52,7 +53,7 @@ instr Main
 endin
 
 ; Prima chiamata, punto di inizio del programma
-schedule("Main", 0, 60*60*24*7 )    
+schedule("Main", 0, -1 )    
 </CsInstruments>
 
 <CsScore>
