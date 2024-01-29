@@ -50,6 +50,6 @@ Da Verificare
 ## Contact
 
 Giuseppe Ernandez - giuseppeernandez@hotmail.it\
-Lorenzo Ballerini -
+Lorenzo Ballerini - https://github.com/LrnzB
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
